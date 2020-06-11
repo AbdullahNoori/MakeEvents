@@ -3,12 +3,16 @@
 const bodyParser = require('body-parser');
 // Initialize express
 const express = require('express')
+const express = require('express')
+const methodOverride = require('method-override')
+
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const models = require('./db/models');
 
-
+// override with POST having ?_method=DELETE or ?_method=PUT
+app.use(methodOverride('_method'))
 // require handlebars
 var exphbs = require('express-handlebars');
 
@@ -70,7 +74,18 @@ app.get('/events/:id', (req, res) => {
     console.log(err.message);
   })
 })
-
+// UPDATE
+app.put('/events/:id', (req, res) => {
+  models.Event.findByPk(req.params.id).then(event => {
+    event.update(req.body).then(event => {
+      res.redirect(`/events/${req.params.id}`);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }).catch((err) => {
+    console.log(err);
+  });
+});
 
   console.log(req.body);
 })
