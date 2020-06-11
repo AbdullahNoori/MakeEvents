@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Todos', {
+    return queryInterface.createTable('Events', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -25,17 +25,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Todos');
-  }
-};
-'use strict';
-
-module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn('Events', 'imgUrl', { type: Sequelize.STRING });
-  },
-
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn('Events', 'imgUrl');
+    return queryInterface.dropTable('Events');
   }
 };

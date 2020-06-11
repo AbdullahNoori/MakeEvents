@@ -6,6 +6,7 @@ const express = require('express')
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const models = require('./db/models');
 
 
 // require handlebars
@@ -38,9 +39,23 @@ app.get('/', (req, res) => {
 app.get('/events/new', (req, res) => {
   res.render('events-new', {});
 })
-
 // CREATE
 app.post('/events', (req, res) => {
+  models.Event.create(req.body).then(event => {
+    res.redirect(`/`);
+  }).catch((err) => {
+    console.log(err)
+  });
+})
+
+// Index
+app.get('/', (req, res) => {
+  models.Event.findAll({ order: [['createdAt', 'DESC']] }).then(events => {
+    res.render('events-index', { events: events });
+  })
+})
+
+
   console.log(req.body);
 })
 // Choose a port to listen on
@@ -49,4 +64,6 @@ const port = process.env.PORT || 3000;
 // Tell the app what port to listen on
 app.listen(port, () => {
   console.log('App listening on port 3000!')
-})   
+})
+
+
